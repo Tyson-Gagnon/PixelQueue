@@ -79,7 +79,7 @@ public class PixelQueue {
         playersInQueueAG= new ArrayList<>();
         timer = 30;
 
-        playersWithElo = TierConfigManager.getTierConfNode("PlayersWithELO").getChildrenList().stream().map(CommentedConfigurationNode::getString).collect(Collectors.toList());
+        //playersWithElo = TierConfigManager.getTierConfNode("PlayersWithELO").getChildrenList().stream().map(CommentedConfigurationNode::getString).collect(Collectors.toList());
 
     }
     private void registerCommands() {
