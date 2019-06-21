@@ -1,14 +1,12 @@
 package me.itsy.pixelqueue;
 
 import com.google.inject.Inject;
+import info.pixelmon.repack.ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import me.itsy.pixelqueue.Commands.Join;
 import me.itsy.pixelqueue.Commands.Queue;
+import me.itsy.pixelqueue.Managers.ConfigManager;
 import me.itsy.pixelqueue.Managers.SQLManager;
-import me.itsy.pixelqueue.Managers.TierConfigManager;
 import me.itsy.pixelqueue.Events.PlayerJoinForFirstTime;
-import net.minecraftforge.common.util.INBTSerializable;
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.command.args.GenericArguments;
@@ -21,10 +19,10 @@ import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 
-import javax.security.auth.login.Configuration;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Plugin(
@@ -37,7 +35,7 @@ import java.util.stream.Collectors;
 public class PixelQueue {
 
     @Inject
-    private Logger logger;
+    private static Logger logger;
 
     @Inject
     @ConfigDir(sharedRoot = false)
@@ -45,7 +43,7 @@ public class PixelQueue {
 
     public static List<String> playersInQueueOU;
     public static List<String> playersInQueueAG;
-    public static List<String> playersWithElo;
+    public static List<String> playersWithELO;
 
     public static int timer;
 
@@ -59,29 +57,39 @@ public class PixelQueue {
 
         instance = this;
 
-       //PlayerConfigManager.setup(dir);
-       //PlayerConfigManager.load();
-
-        TierConfigManager.setup(dir);
-        TierConfigManager.load();
+        //PlayerConfigManager.setup(dir);
+        //PlayerConfigManager.load();
+        ConfigManager.setup(dir);
 
         SQLManager.load();
 
     }
 
+    Function<Object, String> stringTransformer = new Function<Object, String>() {
+        public String apply(Object input) {
+            if (input instanceof String) {
+                return (String) input;
+            } else {
+                return null;
+            }
+        }
+    };
+
     @Listener
-    public void onEnable(GameInitializationEvent e){
+    public void onEnable(GameInitializationEvent e) {
 
         registerCommands();
         registerListeners();
 
         playersInQueueOU = new ArrayList<>();
-        playersInQueueAG= new ArrayList<>();
+        playersInQueueAG = new ArrayList<>();
         timer = 30;
 
-        //playersWithElo = TierConfigManager.getTierConfNode("PlayersWithELO").getChildrenList().stream().map(CommentedConfigurationNode::getString).collect(Collectors.toList());
+        playersWithELO = ConfigManager.getConfNode("PlayersWithELO").getChildrenList().stream().map(CommentedConfigurationNode::getString).collect(Collectors.toList());
+
 
     }
+
     private void registerCommands() {
 
         CommandSpec QueueJoin = CommandSpec.builder()
@@ -94,11 +102,11 @@ public class PixelQueue {
         CommandSpec PixelQueueCMD = CommandSpec.builder()
                 .description(Text.of("Main Command for pixel queue"))
                 .executor(new Queue())
-                .child(QueueJoin,"join")
+                .child(QueueJoin, "join")
                 .permission("pixel.queue")
                 .build();
 
-        game.getCommandManager().register(this, PixelQueueCMD,"pixelqueue","pq");
+        game.getCommandManager().register(this, PixelQueueCMD, "pixelqueue", "pq");
     }
 
     private void registerListeners() {
@@ -107,14 +115,20 @@ public class PixelQueue {
     }
 
     @Listener
-    public void onDisable(GameStoppedServerEvent e){
+    public void onDisable(GameStoppedServerEvent e) {
 
     }
 
-    public static PixelQueue getInstance(){return instance;}
+    public static PixelQueue getInstance() {
+        return instance;
+    }
 
-    public static Path getDir(){
+    public static Path getDir() {
         return instance.dir;
+    }
+
+    public static Logger getLogger() {
+        return logger;
     }
 
 
