@@ -1,7 +1,5 @@
 package me.itsy.pixelqueue.Managers;
 
-import com.sun.org.apache.bcel.internal.generic.SWITCH;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +13,7 @@ public class Storage extends SQLManager{
 
         try{
             Connection connection = getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM PLAYERELO WHERE PLAYER=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM PLAYERSELO WHERE PLAYER=?");
             preparedStatement.setString(1,player.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -37,7 +35,7 @@ public class Storage extends SQLManager{
 
         try{
             Connection connection = getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM PLAYERELO WHERE PLAYER=?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM PLAYERSELO WHERE PLAYER=?");
             preparedStatement.setString(1,player.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -56,26 +54,40 @@ public class Storage extends SQLManager{
 
     //TODO: getEloAG
 
-    public static void setELO(UUID player, int ELO, String type){
-
-        switch (type.toUpperCase()){
-            case "OU":
-                type = "ELOOU";
-                break;
-            case "AG":
-                type = "ELOAG";
-                break;
-        }
+    public static void setOUELO(UUID player, int ELO){
 
         try{
 
             Connection connection = getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE PLAYERSELO SET ? = ? WHERE PLAYER = ?");
-            preparedStatement.setString(1,type);
-            preparedStatement.setInt(2,ELO);
-            preparedStatement.setString(3,player.toString());
+            PreparedStatement preparedStatement = connection.prepareStatement("MERGE INTO PLAYERSELO (PLAYER,ELOOU) KEY (PLAYER) VALUES (?,?)");
 
-            preparedStatement.executeQuery();
+            preparedStatement.setString(1,player.toString());
+            preparedStatement.setInt(2,ELO);
+
+
+            preparedStatement.execute();
+
+            preparedStatement.close();
+            connection.close();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void setAGELO(UUID player, int ELO){
+
+        try{
+
+            Connection connection = getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("MERGE INTO PLAYERSELO (PLAYER,AG) KEY (PLAYER) VALUES (?,?)");
+
+            preparedStatement.setString(1,player.toString());
+            preparedStatement.setInt(2,ELO);
+
+
+            preparedStatement.execute();
 
             preparedStatement.close();
             connection.close();

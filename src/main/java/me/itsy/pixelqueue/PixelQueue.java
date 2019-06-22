@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import info.pixelmon.repack.ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import me.itsy.pixelqueue.Commands.Join;
 import me.itsy.pixelqueue.Commands.Queue;
+import me.itsy.pixelqueue.Commands.SetEloCommand;
+import me.itsy.pixelqueue.Commands.getEloCommand;
 import me.itsy.pixelqueue.Managers.ConfigManager;
 import me.itsy.pixelqueue.Managers.SQLManager;
 import me.itsy.pixelqueue.Events.PlayerJoinForFirstTime;
@@ -92,6 +94,20 @@ public class PixelQueue {
 
     private void registerCommands() {
 
+        CommandSpec set = CommandSpec.builder()
+                .description(Text.of("Enters the queue for the specified format. </pq join OU>"))
+                .executor(new SetEloCommand())
+                .arguments(GenericArguments.integer(Text.of("elo")))
+                .permission("pixelqueue.join")
+                .build();
+
+        CommandSpec get = CommandSpec.builder()
+                .description(Text.of("Enters the queue for the specified format. </pq join OU>"))
+                .executor(new getEloCommand())
+                .arguments()
+                .permission("pixelqueue.join")
+                .build();
+
         CommandSpec QueueJoin = CommandSpec.builder()
                 .description(Text.of("Enters the queue for the specified format. </pq join OU>"))
                 .executor(new Join())
@@ -103,6 +119,8 @@ public class PixelQueue {
                 .description(Text.of("Main Command for pixel queue"))
                 .executor(new Queue())
                 .child(QueueJoin, "join")
+                .child(get,"getELO")
+                .child(set,"set")
                 .permission("pixel.queue")
                 .build();
 
