@@ -24,7 +24,7 @@ public class Join implements CommandExecutor {
         if(!PixelQueue.playersInQueueOU.contains(player) ||  PixelQueue.playersInQueueAG.contains(player)) {
             if(format.equalsIgnoreCase("ou")||format.equalsIgnoreCase("overused")){
                 PixelQueue.playersInQueueOU.add(player);
-                if(PixelQueue.playersInQueueOU.size() > 2){
+                if(PixelQueue.playersInQueueOU.size() > 1){
                     player.sendMessage(Text.of(TextColors.GOLD,"[PixelQueue] ",TextColors.BLUE," You have been added to the queue! The estimated wait time is ",
                             PixelQueue.timer," seconds! There are currently ",PixelQueue.playersInQueueOU.size()-1," other players in the queue!"));
                 }else{

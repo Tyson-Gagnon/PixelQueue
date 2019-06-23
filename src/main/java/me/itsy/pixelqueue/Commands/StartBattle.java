@@ -1,23 +1,25 @@
 package me.itsy.pixelqueue.Commands;
 
 import com.pixelmonmod.pixelmon.Pixelmon;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.battles.BattleQuery;
 import com.pixelmonmod.pixelmon.battles.rules.BattleRules;
+import me.itsy.pixelqueue.Managers.Storage;
 import me.itsy.pixelqueue.Objects.Rules;
 import net.minecraft.entity.player.EntityPlayerMP;
 import org.spongepowered.api.entity.living.player.Player;
 
 public class StartBattle {
 
-    Player p1,p2;
-    EntityPlayerMP emplayer1, emplayer2;
 
-    public void StartBattle(Player player, Player player2){
-        this.p1 = player;
-        this.p2 = player2;
+
+    public static void startBattle(Player p1, Player p2){
+
+        EntityPlayerMP emplayer1, emplayer2;
 
         emplayer1 = (EntityPlayerMP)p1;
        emplayer2 = (EntityPlayerMP)p2;
+
 
         Rules rulesClass = new Rules();
 

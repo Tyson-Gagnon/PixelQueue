@@ -3,6 +3,7 @@ package me.itsy.pixelqueue.Formats;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.storage.PartyStorage;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
+import me.itsy.pixelqueue.Commands.StartBattle;
 import me.itsy.pixelqueue.Managers.Storage;
 import me.itsy.pixelqueue.Objects.BattlingPlayers;
 import me.itsy.pixelqueue.Objects.PlayerWithELO;
@@ -22,7 +23,9 @@ public class OverUsed {
 
         List<PlayerWithELO> listOfPlayersInQueue = new ArrayList<>();
 
-        for(int i = 0; i < PixelQueue.playersInQueueOU.size();i++){
+
+        for(int i = 0; i < PixelQueue.playersInQueueOU.size();i++)
+        {
 
             Player spongePlayer = PixelQueue.playersInQueueOU.get(i);
             EntityPlayerMP entityPlayerMP = (EntityPlayerMP)spongePlayer;
@@ -40,7 +43,7 @@ public class OverUsed {
             if(canPlay){
                 PlayerWithELO playerWithELO = new PlayerWithELO(spongePlayer, Storage.getELOOU(spongePlayer.getUniqueId()),Storage.getELOAG(spongePlayer.getUniqueId()));
                 listOfPlayersInQueue.add(playerWithELO);
-
+                PixelQueue.playersInQueueOU.remove(spongePlayer);
                 listOfPlayersInQueue.sort(new Comparator<PlayerWithELO>() {
 
                     @Override
@@ -52,29 +55,35 @@ public class OverUsed {
                     }
                 });
 
-                boolean flag = false;
-
-                if(listOfPlayersInQueue.size() % 2 == 0){
-                    flag = true;
-                }
-                if(flag){
-                    while(listOfPlayersInQueue.size() > 0){
-                        PixelQueue.battlingPlayers.add(new BattlingPlayers(listOfPlayersInQueue.get(0).getPlayer(),listOfPlayersInQueue.get(1).getPlayer()));
-                        listOfPlayersInQueue.remove(listOfPlayersInQueue.get(0));
-                        listOfPlayersInQueue.remove(listOfPlayersInQueue.get(1));
-                    }
-                }else {
-                    while(listOfPlayersInQueue.size() > 1){
-                        PixelQueue.battlingPlayers.add(new BattlingPlayers(listOfPlayersInQueue.get(0).getPlayer(),listOfPlayersInQueue.get(1).getPlayer()));
-                        listOfPlayersInQueue.remove(listOfPlayersInQueue.get(0));
-                        listOfPlayersInQueue.remove(listOfPlayersInQueue.get(1));
-                    }
-                }
-
 
             }else{
                 spongePlayer.sendMessage(Text.of(TextColors.GOLD,"[PixelQueue] ",TextColors.RED," You have been kicked from the queue. You have an illegal pokemon in your party!"));
             }
         }
+
+
+        boolean flag = false;
+
+        if(listOfPlayersInQueue.size() % 2 == 0){
+            flag = true;
+        }
+        if(flag){
+            while(listOfPlayersInQueue.size() > 0){
+                PixelQueue.battlingPlayers.add(new BattlingPlayers(listOfPlayersInQueue.get(0).getPlayer(),listOfPlayersInQueue.get(1).getPlayer()));
+                listOfPlayersInQueue.remove(listOfPlayersInQueue.get(0));
+                listOfPlayersInQueue.remove(listOfPlayersInQueue.get(1));
+                StartBattle.startBattle(listOfPlayersInQueue.get(0).getPlayer(),listOfPlayersInQueue.get(1).getPlayer());
+            }
+        }else {
+            while(listOfPlayersInQueue.size() > 1){
+                PixelQueue.battlingPlayers.add(new BattlingPlayers(listOfPlayersInQueue.get(0).getPlayer(),listOfPlayersInQueue.get(1).getPlayer()));
+                listOfPlayersInQueue.remove(listOfPlayersInQueue.get(0));
+                listOfPlayersInQueue.remove(listOfPlayersInQueue.get(1));
+                StartBattle.startBattle(listOfPlayersInQueue.get(0).getPlayer(),listOfPlayersInQueue.get(1).getPlayer());
+            }
+        }
+
     }
+
+
 }
