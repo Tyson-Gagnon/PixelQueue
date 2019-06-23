@@ -1,6 +1,7 @@
 package me.itsy.pixelqueue;
 
 import com.google.inject.Inject;
+import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import info.pixelmon.repack.ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import me.itsy.pixelqueue.Commands.Join;
 import me.itsy.pixelqueue.Commands.Queue;
@@ -9,11 +10,14 @@ import me.itsy.pixelqueue.Commands.getEloCommand;
 import me.itsy.pixelqueue.Managers.ConfigManager;
 import me.itsy.pixelqueue.Managers.SQLManager;
 import me.itsy.pixelqueue.Events.PlayerJoinForFirstTime;
+import me.itsy.pixelqueue.Objects.BattlingPlayers;
+import me.itsy.pixelqueue.Objects.TimerObject;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
@@ -24,6 +28,7 @@ import org.spongepowered.api.text.Text;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -43,9 +48,11 @@ public class PixelQueue {
     @ConfigDir(sharedRoot = false)
     private Path dir;
 
-    public static List<String> playersInQueueOU;
-    public static List<String> playersInQueueAG;
+    public static List<Player> playersInQueueOU;
+    public static List<Player> playersInQueueAG;
     public static List<String> playersWithELO;
+    public static List<EnumSpecies> bannedPokemon;
+    public static List<BattlingPlayers> battlingPlayers;
 
     public static int timer;
 
@@ -85,11 +92,16 @@ public class PixelQueue {
 
         playersInQueueOU = new ArrayList<>();
         playersInQueueAG = new ArrayList<>();
+        TimerObject.startTimer();
+
         timer = 30;
 
         playersWithELO = ConfigManager.getConfNode("PlayersWithELO").getChildrenList().stream().map(CommentedConfigurationNode::getString).collect(Collectors.toList());
 
-
+        List<String> bannedPokemonNames = ConfigManager.getConfNode("OUBANNED","Pokemon").getChildrenList().stream().map(CommentedConfigurationNode::getString).collect(Collectors.toList());
+        for(int i = 0; i < bannedPokemonNames.size();i++){
+            bannedPokemon.add(EnumSpecies.getFromNameAnyCase(bannedPokemonNames.get(i)));
+        }
     }
 
     private void registerCommands() {
@@ -125,6 +137,8 @@ public class PixelQueue {
                 .build();
 
         game.getCommandManager().register(this, PixelQueueCMD, "pixelqueue", "pq");
+
+
     }
 
     private void registerListeners() {

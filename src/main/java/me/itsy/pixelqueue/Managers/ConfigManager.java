@@ -33,9 +33,16 @@ public class ConfigManager {
             tierLoad = HoconConfigurationLoader.builder().setPath(config).build();
             tierNode = tierLoad.load();
             List<String> people = new ArrayList<>();
+            List<String> BANNEDPokemon = new ArrayList<>();
+
             people.add("EEEEEE");
+            BANNEDPokemon.add("LUGIA");
+            BANNEDPokemon.add("GROUDON");
+            BANNEDPokemon.add("KYOGRE");
+
 
             tierNode.getNode("PeopleWithELO").setValue(people);
+            tierNode.getNode("OUBANNED","Pokemon").setValue(BANNEDPokemon);
             save();
 
         } catch(IOException e) {

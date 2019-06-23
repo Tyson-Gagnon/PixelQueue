@@ -21,9 +21,9 @@ public class Join implements CommandExecutor {
 
         String format = args.<String>getOne("format").get();
 
-        if(!PixelQueue.playersInQueueOU.contains(player.getName()) ||  PixelQueue.playersInQueueAG.contains(player.getName())) {
+        if(!PixelQueue.playersInQueueOU.contains(player) ||  PixelQueue.playersInQueueAG.contains(player)) {
             if(format.equalsIgnoreCase("ou")||format.equalsIgnoreCase("overused")){
-                PixelQueue.playersInQueueOU.add(player.getName());
+                PixelQueue.playersInQueueOU.add(player);
                 if(PixelQueue.playersInQueueOU.size() > 2){
                     player.sendMessage(Text.of(TextColors.GOLD,"[PixelQueue] ",TextColors.BLUE," You have been added to the queue! The estimated wait time is ",
                             PixelQueue.timer," seconds! There are currently ",PixelQueue.playersInQueueOU.size()-1," other players in the queue!"));
@@ -33,7 +33,7 @@ public class Join implements CommandExecutor {
             }
 
             else if(format.equalsIgnoreCase("AG")||format.equalsIgnoreCase("AnythingGoes")){
-                PixelQueue.playersInQueueAG.add(player.getName());
+                PixelQueue.playersInQueueAG.add(player);
                 if(PixelQueue.playersInQueueAG.size() > 2){
                     player.sendMessage(Text.of(TextColors.GOLD,"[PixelQueue] ",TextColors.BLUE," You have been added to the queue! The estimated wait time is ",
                             PixelQueue.timer," seconds! There are currently ",PixelQueue.playersInQueueOU.size()-1," other players in the queue!"));
