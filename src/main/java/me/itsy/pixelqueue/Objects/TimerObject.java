@@ -14,21 +14,23 @@ public class TimerObject {
 
     public static void startTimer(){
         Task matchingTimer = Task.builder()
-                .execute(() -> OverUsed.matchOUPlayers())
-                .execute(() -> AnythingGoes.matchAGPlayers())
-                .execute(() -> PixelQueue.timer = 30)
-                .execute(() -> Sponge.getServer().getBroadcastChannel().send(Text.of("Timer Running")))
-                .async()
+                .execute(() -> checker())
                 .interval(30, TimeUnit.SECONDS)
                 .name("Match players together in a queue").submit(PixelQueue.getInstance());
 
 
         Task timerQuee = Task.builder()
                 .execute(() -> PixelQueue.timer = PixelQueue.timer - 1)
-                .async()
                 .interval(1, TimeUnit.SECONDS)
                 .name("Match  together in a queue").submit(PixelQueue.getInstance());
 
+    }
+
+    public static void checker(){
+        OverUsed.matchOUPlayers();
+        AnythingGoes.matchAGPlayers();
+        PixelQueue.timer = 30;
+        Sponge.getServer().getBroadcastChannel().send(Text.of("Timer Running"));
     }
 
 

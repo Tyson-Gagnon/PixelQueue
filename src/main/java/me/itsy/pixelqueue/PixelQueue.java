@@ -51,7 +51,7 @@ public class PixelQueue {
     public static List<Player> playersInQueueOU;
     public static List<Player> playersInQueueAG;
     public static List<String> playersWithELO;
-    public static List<EnumSpecies> bannedPokemon;
+    public static List<EnumSpecies> bannedPokemon = new ArrayList<>();
     public static List<BattlingPlayers> battlingPlayers;
 
     public static int timer;
@@ -99,9 +99,9 @@ public class PixelQueue {
         playersWithELO = ConfigManager.getConfNode("PlayersWithELO").getChildrenList().stream().map(CommentedConfigurationNode::getString).collect(Collectors.toList());
 
         List<String> bannedPokemonNames = ConfigManager.getConfNode("OUBANNED","Pokemon").getChildrenList().stream().map(CommentedConfigurationNode::getString).collect(Collectors.toList());
-        for(int i = 0; i < bannedPokemonNames.size();i++){
-            bannedPokemon.add(EnumSpecies.getFromNameAnyCase(bannedPokemonNames.get(i)));
-        }
+     ///  for(int i = 0; i < bannedPokemonNames.size();i++){
+            bannedPokemon.add(EnumSpecies.Rayquaza);
+      // }
     }
 
     private void registerCommands() {
