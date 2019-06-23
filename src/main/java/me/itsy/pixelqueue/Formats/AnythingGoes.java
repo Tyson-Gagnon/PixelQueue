@@ -1,4 +1,4 @@
-package me.itsy.pixelqueue.Objects;
+package me.itsy.pixelqueue.Formats;
 
 public class AnythingGoes {
 

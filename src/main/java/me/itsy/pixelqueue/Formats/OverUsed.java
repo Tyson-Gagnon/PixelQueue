@@ -1,9 +1,11 @@
-package me.itsy.pixelqueue.Objects;
+package me.itsy.pixelqueue.Formats;
 
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.storage.PartyStorage;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import me.itsy.pixelqueue.Managers.Storage;
+import me.itsy.pixelqueue.Objects.BattlingPlayers;
+import me.itsy.pixelqueue.Objects.PlayerWithELO;
 import me.itsy.pixelqueue.PixelQueue;
 import net.minecraft.entity.player.EntityPlayerMP;
 import org.spongepowered.api.entity.living.player.Player;
