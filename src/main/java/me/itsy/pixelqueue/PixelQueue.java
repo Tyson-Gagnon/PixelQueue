@@ -1,12 +1,11 @@
 package me.itsy.pixelqueue;
 
 import com.google.inject.Inject;
+import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import info.pixelmon.repack.ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import me.itsy.pixelqueue.Commands.Join;
-import me.itsy.pixelqueue.Commands.Queue;
-import me.itsy.pixelqueue.Commands.SetEloCommand;
-import me.itsy.pixelqueue.Commands.getEloCommand;
+import me.itsy.pixelqueue.Commands.*;
+import me.itsy.pixelqueue.Events.BattleEnd;
 import me.itsy.pixelqueue.Events.DisconnectEvent;
 import me.itsy.pixelqueue.Managers.ConfigManager;
 import me.itsy.pixelqueue.Managers.SQLManager;
@@ -107,6 +106,13 @@ public class PixelQueue {
 
     private void registerCommands() {
 
+        CommandSpec leave = CommandSpec.builder()
+                .description(Text.of("Leaves all queues"))
+                .executor(new Leave())
+                .arguments()
+                .permission("pixelqueue.leave")
+                .build();
+
         CommandSpec set = CommandSpec.builder()
                 .description(Text.of("Enters the queue for the specified format. </pq join OU>"))
                 .executor(new SetEloCommand())
@@ -134,6 +140,7 @@ public class PixelQueue {
                 .child(QueueJoin, "join")
                 .child(get,"getELO")
                 .child(set,"set")
+                .child(leave, "leave")
                 .permission("pixel.queue")
                 .build();
 
@@ -145,6 +152,7 @@ public class PixelQueue {
     private void registerListeners() {
         game.getEventManager().registerListeners(this, new PlayerJoinForFirstTime());
         game.getEventManager().registerListeners(this, new DisconnectEvent());
+        Pixelmon.EVENT_BUS.register(new BattleEnd());
     }
 
     @Listener

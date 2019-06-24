@@ -10,6 +10,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 import java.util.List;
 import java.util.Map;
@@ -62,8 +64,13 @@ public class BattleEnd {
                         winnerElo = EloRating(winnerElo,loserElo,winnerk,true);
                         loserElo = EloRating(loserElo,winnerElo,loserK,false);
 
+                        ((Player) winner).sendMessage(Text.of(TextColors.GOLD,"[Pixel Queue] ",TextColors.BLUE,"Congratulations on winning! Your new ELO rating is " ,TextColors.GREEN, winnerElo));
+                        ((Player) loser).sendMessage(Text.of(TextColors.GOLD,"[Pixel Queue] ",TextColors.BLUE,"Oh no! You lost :( Your new ELO is " ,TextColors.GREEN, loserElo));
+
                         Storage.setOUELO(((Player)winner).getUniqueId(),winnerElo);
-                        Storage.setOUELO(((Player)winner).getUniqueId(),loserElo);
+                        Storage.setOUELO(((Player)loser).getUniqueId(),loserElo);
+
+
 
                     }
                 }
@@ -133,7 +140,7 @@ public class BattleEnd {
             Rb = Rb + K * (1 - Pb);
         }
 
-        return (int) Ra;
+        return Ra;
 
 
     }
