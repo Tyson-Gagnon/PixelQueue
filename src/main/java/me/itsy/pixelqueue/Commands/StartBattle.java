@@ -4,6 +4,7 @@ import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.battles.BattleQuery;
 import com.pixelmonmod.pixelmon.battles.rules.BattleRules;
+import com.pixelmonmod.pixelmon.comm.packetHandlers.battles.EnumBattleQueryResponse;
 import me.itsy.pixelqueue.Managers.Storage;
 import me.itsy.pixelqueue.Objects.Rules;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -33,6 +34,8 @@ public class StartBattle {
 
         battlequery.battleRules = battleRules;
 
+        battlequery.acceptQuery(emplayer1, EnumBattleQueryResponse.Accept);
+        battlequery.acceptQuery(emplayer2, EnumBattleQueryResponse.Accept);
 
 
     }

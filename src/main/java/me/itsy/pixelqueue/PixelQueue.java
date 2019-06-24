@@ -7,6 +7,7 @@ import me.itsy.pixelqueue.Commands.Join;
 import me.itsy.pixelqueue.Commands.Queue;
 import me.itsy.pixelqueue.Commands.SetEloCommand;
 import me.itsy.pixelqueue.Commands.getEloCommand;
+import me.itsy.pixelqueue.Events.DisconnectEvent;
 import me.itsy.pixelqueue.Managers.ConfigManager;
 import me.itsy.pixelqueue.Managers.SQLManager;
 import me.itsy.pixelqueue.Events.PlayerJoinForFirstTime;
@@ -52,7 +53,7 @@ public class PixelQueue {
     public static List<Player> playersInQueueAG;
     public static List<String> playersWithELO;
     public static List<EnumSpecies> bannedPokemon = new ArrayList<>();
-    public static List<BattlingPlayers> battlingPlayers;
+    public static List<BattlingPlayers> battlingPlayers = new ArrayList<>();
 
     public static int timer;
 
@@ -143,7 +144,7 @@ public class PixelQueue {
 
     private void registerListeners() {
         game.getEventManager().registerListeners(this, new PlayerJoinForFirstTime());
-
+        game.getEventManager().registerListeners(this, new DisconnectEvent());
     }
 
     @Listener
