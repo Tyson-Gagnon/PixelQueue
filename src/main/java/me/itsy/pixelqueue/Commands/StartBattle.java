@@ -8,6 +8,7 @@ import com.pixelmonmod.pixelmon.comm.packetHandlers.battles.EnumBattleQueryRespo
 import me.itsy.pixelqueue.Managers.Storage;
 import me.itsy.pixelqueue.Objects.Rules;
 import net.minecraft.entity.player.EntityPlayerMP;
+import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.living.player.Player;
 
 public class StartBattle {
@@ -36,6 +37,9 @@ public class StartBattle {
 
         battlequery.acceptQuery(emplayer1, EnumBattleQueryResponse.Accept);
         battlequery.acceptQuery(emplayer2, EnumBattleQueryResponse.Accept);
+
+        p1.playSound(SoundTypes.ENTITY_ENDERDRAGON_GROWL,p1.getPosition(),3);
+        p2.playSound(SoundTypes.ENTITY_ENDERDRAGON_GROWL,p2.getPosition(),3);
 
 
     }

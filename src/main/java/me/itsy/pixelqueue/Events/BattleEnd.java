@@ -58,11 +58,11 @@ public class BattleEnd {
 
                         int winnerk, loserK;
 
-                        winnerk = kValue(winnerElo,true);
-                        loserK = kValue(loserElo,false);
+                        winnerk = determineK(winnerElo);
+                        loserK = determineK(loserElo);
 
-                        winnerElo = EloRating(winnerElo,loserElo,winnerk,true);
-                        loserElo = EloRating(loserElo,winnerElo,loserK,false);
+                        winnerElo = calculate2PlayersRating(winnerElo,loserElo,winnerk,"+");
+                        loserElo = calculate2PlayersRating(loserElo,winnerElo,loserK,"-");
 
                         ((Player) winner).sendMessage(Text.of(TextColors.GOLD,"[Pixel Queue] ",TextColors.BLUE,"Congratulations on winning! Your new ELO rating is " ,TextColors.GREEN, winnerElo));
                         ((Player) loser).sendMessage(Text.of(TextColors.GOLD,"[Pixel Queue] ",TextColors.BLUE,"Oh no! You lost :( Your new ELO is " ,TextColors.GREEN, loserElo));
@@ -81,68 +81,42 @@ public class BattleEnd {
 
     }
 
-    public int kValue(int elo, boolean isWinner){
-        int k = 80;
-
-        if(elo >= 1100 && elo < 1300){
-            k = 50;
-        }else if(elo >= 1300 && elo < 1600 ){
-            k = 40;
-        }else if(elo >= 1600){
-            k = 32;
-        }else{
-            if(isWinner){
-                k = 80;
-            }else{
-                k = 20;
-            }
+    public int determineK(int rating) {
+        int K;
+        if (rating < 2000) {
+            K = 32;
+        } else if (rating >= 2000 && rating < 2400) {
+            K = 24;
+        } else {
+            K = 16;
         }
-
-        return k;
+        return K;
     }
 
-    // Function to calculate the Probability
-    static double Probability(int rating1,
-                             int rating2)
-    {
-        return 1.0f * 1.0f / (1 + 1.0f *
-                (Math.pow(10, 1.0f *
-                        (rating1 - rating2) / 400)));
-    }
+    private int calculate2PlayersRating(int player1Rating, int player2Rating,int k, String outcome) {
 
-    // Function to calculate Elo rating
-    // K is a constant.
-    // d determines whether Player A wins
-    // or Player B.
-    static int EloRating(int Ra, int Rb,
-                          int K, boolean d)
-    {
+        double actualScore;
 
-        // To calculate the Winning
-        // Probability of Player B
-        int Pb = (int) Probability(Ra, Rb);
-
-        // To calculate the Winning
-        // Probability of Player A
-        int Pa = (int) Probability(Rb, Ra);
-
-        // Case -1 When Player A wins
-        // Updating the Elo Ratings
-        if (d == true) {
-            Ra = Ra + K * (1 - Pa);
-            Rb = Rb + K * (0 - Pb);
+        // winner
+        if (outcome.equals("+")) {
+            actualScore = 1.0;
+            // draw
+        } else if (outcome.equals("=")) {
+            actualScore = 0.5;
+            // lose
+        } else if (outcome.equals("-")) {
+            actualScore = 0;
+            // invalid outcome
+        } else {
+            return player1Rating;
         }
 
-        // Case -2 When Player B wins
-        // Updating the Elo Ratings
-        else {
-            Ra = Ra + K * (0 - Pa);
-            Rb = Rb + K * (1 - Pb);
-        }
+        // calculate expected outcome
+        double exponent = (double) (player2Rating - player1Rating) / 400;
+        double expectedOutcome = (1 / (1 + (Math.pow(10, exponent))));
 
-        return Ra;
-
-
+        return (int) Math.round(player1Rating + k * (actualScore - expectedOutcome));
     }
+
 
 }

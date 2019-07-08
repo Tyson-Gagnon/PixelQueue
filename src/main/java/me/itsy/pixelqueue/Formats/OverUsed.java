@@ -35,6 +35,7 @@ public class OverUsed {
                     if (party.get(j) != null) {
                         for (int k = 0; k < PixelQueue.bannedPokemon.size(); k++) {
                             if (party.get(j).getSpecies().equals(PixelQueue.bannedPokemon.get(k))) {
+                                PixelQueue.playersInQueueOU.remove(spongePlayer);
                                 canPlay = false;
                             }
                         }

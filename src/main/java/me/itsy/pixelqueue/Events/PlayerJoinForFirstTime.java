@@ -24,10 +24,10 @@ public class PlayerJoinForFirstTime extends SQLManager {
                 Connection connection = getConnection();
 
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                        "INSERT INTO" +
-                                " PLAYERSELO (PLAYER,PLAYERNAME) " +
-                                "VALUES" +
-                                " (?,?)");
+                        "INSERT INTO " +
+                                "PLAYERSELO (PLAYER,PLAYERNAME) " +
+                                "VALUES " +
+                                "(?,?)");
                 preparedStatement.setString(1, player.getUniqueId().toString());
                 preparedStatement.setString(2, player.getName());
 

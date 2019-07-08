@@ -33,7 +33,7 @@ public class Rules {
         clause.add(battleClauses.get(8));
         clause.add(battleClauses.get(9));
         clause.add(battleClauses.get(15));
-        clause.add(battleClauses.get(18));
+        clause.add(battleClauses.get(17));
         clause.add(battleClauses.get(19));
         clause.add(battleClauses.get(21));
         clause.add(battleClauses.get(26));
@@ -41,7 +41,6 @@ public class Rules {
 
         rules.levelCap = 100;
         rules.teamPreview = true;
-        rules.raiseToCap = true;
         rules.teamSelectTime = 60;
         rules.turnTime = 100;
     }
