@@ -67,6 +67,10 @@ public class BattleEnd {
                         ((Player) winner).sendMessage(Text.of(TextColors.GOLD,"[Pixel Queue] ",TextColors.BLUE,"Congratulations on winning! Your new ELO rating is " ,TextColors.GREEN, winnerElo));
                         ((Player) loser).sendMessage(Text.of(TextColors.GOLD,"[Pixel Queue] ",TextColors.BLUE,"Oh no! You lost :( Your new ELO is " ,TextColors.GREEN, loserElo));
 
+                        Storage.addWin(winner.getUniqueID());
+                        ((Player) winner).sendMessage(Text.of(TextColors.GOLD,"[Pixel Queue] ",TextColors.BLUE,"You are now at " ,TextColors.GREEN, Storage.getWins(winner.getUniqueID()),
+                                TextColors.BLUE," wins"));
+
                         Storage.setOUELO(((Player)winner).getUniqueId(),winnerElo);
                         Storage.setOUELO(((Player)loser).getUniqueId(),loserElo);
 

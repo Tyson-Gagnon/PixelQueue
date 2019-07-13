@@ -35,7 +35,6 @@ public class OverUsed {
                     if (party.get(j) != null) {
                         for (int k = 0; k < PixelQueue.bannedPokemon.size(); k++) {
                             if (party.get(j).getSpecies().equals(PixelQueue.bannedPokemon.get(k))) {
-                                PixelQueue.playersInQueueOU.remove(spongePlayer);
                                 canPlay = false;
                             }
                         }
@@ -62,33 +61,25 @@ public class OverUsed {
                 }
             }
 
-            for (int j = 0; j < listOfPlayersInQueue.size(); j++) {
-                Sponge.getServer().getBroadcastChannel().send(Text.of(listOfPlayersInQueue.get(j).getPlayer().getName()));
-                if (PixelQueue.playersInQueueOU.contains(listOfPlayersInQueue.get(j).getPlayer())) {
-                    PixelQueue.playersInQueueOU.remove(listOfPlayersInQueue.get(j).getPlayer());
+            if (PixelQueue.playersInQueueOU.size() > 1) {
+                for (PlayerWithELO playerWithELO : listOfPlayersInQueue) {
+                    Sponge.getServer().getBroadcastChannel().send(Text.of(playerWithELO.getPlayer().getName()));
+                    if (PixelQueue.playersInQueueOU.contains(playerWithELO.getPlayer())) {
+                        PixelQueue.playersInQueueOU.remove(playerWithELO.getPlayer());
+                    }
                 }
             }
 
-
-            boolean flag = false;
-
-            if (listOfPlayersInQueue.size() % 2 == 0) {
-                Sponge.getServer().getBroadcastChannel().send(Text.of("Even amount of players"));
-                flag = true;
-            }
-
-            while (listOfPlayersInQueue.size() > 0) {
-
-                if (flag) {
+            while (listOfPlayersInQueue.size() > 1) {
 
                     PixelQueue.battlingPlayers.add(new BattlingPlayers(listOfPlayersInQueue.get(0).getPlayer(), listOfPlayersInQueue.get(1).getPlayer()));
                     StartBattle.startBattle(listOfPlayersInQueue.get(0).getPlayer(), listOfPlayersInQueue.get(1).getPlayer());
                     listOfPlayersInQueue.remove(listOfPlayersInQueue.get(0));
                     listOfPlayersInQueue.remove(listOfPlayersInQueue.get(0));
 
-
                     Sponge.getServer().getBroadcastChannel().send(Text.of("MAtching..."));
-                }
+
+
 
             }
         }

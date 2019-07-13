@@ -106,6 +106,13 @@ public class PixelQueue {
 
     private void registerCommands() {
 
+        CommandSpec leaderboardCMD = CommandSpec.builder()
+                .description(Text.of("Displays leaderboard based on ELO"))
+                .executor(new leaderboard())
+                .arguments(GenericArguments.optional(GenericArguments.integer(Text.of("page"))),GenericArguments.optional(GenericArguments.string(Text.of("user"))))
+                .permission("pixelqueue.leaderboard")
+                .build();
+
         CommandSpec leave = CommandSpec.builder()
                 .description(Text.of("Leaves all queues"))
                 .executor(new Leave())
@@ -139,12 +146,14 @@ public class PixelQueue {
                 .executor(new Queue())
                 .child(QueueJoin, "join")
                 .child(get,"getELO")
+                .child(leaderboardCMD,"leaderboard","lb")
                 .child(set,"set")
                 .child(leave, "leave")
                 .permission("pixel.queue")
                 .build();
 
         game.getCommandManager().register(this, PixelQueueCMD, "pixelqueue", "pq");
+        game.getCommandManager().register(this,leaderboardCMD,"leaderboard","lb");
 
 
     }

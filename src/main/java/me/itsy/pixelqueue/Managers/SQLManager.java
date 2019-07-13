@@ -25,6 +25,7 @@ public class SQLManager {
                     "PLAYERNAME VARCHAR(20)," +
                     "ELOOU INT NOT NULL DEFAULT 1000," +
                     "ELOAG INT NOT NULL DEFAULT 1000," +
+                    "WINS INT NOT NULL DEFAULT 0," +
                     "PRIMARY KEY (PLAYER))");
 
             stmt.close();
