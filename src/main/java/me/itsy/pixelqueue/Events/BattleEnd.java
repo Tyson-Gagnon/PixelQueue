@@ -64,6 +64,10 @@ public class BattleEnd {
                         winnerElo = calculate2PlayersRating(winnerElo,loserElo,winnerk,"+");
                         loserElo = calculate2PlayersRating(loserElo,winnerElo,loserK,"-");
 
+                        if(loserElo < 900){
+                            loserElo = 900;
+                        }
+
                         ((Player) winner).sendMessage(Text.of(TextColors.GOLD,"[Pixel Queue] ",TextColors.BLUE,"Congratulations on winning! Your new ELO rating is " ,TextColors.GREEN, winnerElo));
                         ((Player) loser).sendMessage(Text.of(TextColors.GOLD,"[Pixel Queue] ",TextColors.BLUE,"Oh no! You lost :( Your new ELO is " ,TextColors.GREEN, loserElo));
 
@@ -87,12 +91,12 @@ public class BattleEnd {
 
     public int determineK(int rating) {
         int K;
-        if (rating < 2000) {
+        if (rating > 1600) {
             K = 32;
-        } else if (rating >= 2000 && rating < 2400) {
+        } else if (rating >= 1300 && rating < 1599) {
             K = 24;
         } else {
-            K = 16;
+            K = 50;
         }
         return K;
     }

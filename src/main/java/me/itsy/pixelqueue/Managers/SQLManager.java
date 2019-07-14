@@ -21,9 +21,10 @@ public class SQLManager {
             Statement stmt = connection.createStatement();
 
             stmt.execute("CREATE TABLE IF NOT EXISTS PLAYERSELO ("
-            + "PLAYER UUID UNSIGNED NOT NULL," +
+            +       "PLAYER UUID UNSIGNED NOT NULL," +
                     "PLAYERNAME VARCHAR(20)," +
                     "ELOOU INT NOT NULL DEFAULT 1000," +
+                    "" +
                     "ELOAG INT NOT NULL DEFAULT 1000," +
                     "WINS INT NOT NULL DEFAULT 0," +
                     "PRIMARY KEY (PLAYER))");

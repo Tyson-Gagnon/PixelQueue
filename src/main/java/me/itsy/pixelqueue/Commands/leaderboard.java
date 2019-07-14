@@ -21,6 +21,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -34,23 +35,29 @@ public class leaderboard implements CommandExecutor {
         }
         Player player = (Player) src;
 
+        String input;
         int page;
 
-        if (args.hasAny("page")) {
-            page = (args.<Integer>getOne("page").get() - 1) * 10;
-            showLeaderBoard(page, player);
-        } else if (args.hasAny("user")) {
 
-            String userName = args.<String>getOne("user").get();
-            Optional<User> optionalUser = Sponge.getServiceManager().provide(UserStorageService.class).get().get(userName);
-            if (optionalUser.isPresent()) {
-                Player user = (Player) optionalUser.get();
-                printUserInfo(user,player);
-            } else {
-                player.sendMessage(Text.of(TextColors.RED, "User not found"));
+
+        if (args.hasAny("page")) {
+            input = args.<String>getOne("page").get();
+            try{
+               page = Integer.parseInt(input);
+                page =  (page - 1) * 10;
+                showLeaderBoard(page, player);
+            }catch (Exception e){
+                String userName = args.<String>getOne("page").get();
+                Optional<User> optionalUser = Sponge.getServiceManager().provide(UserStorageService.class).get().get(userName);
+                if (optionalUser.isPresent()) {
+                    User user = optionalUser.get();
+                    printUserInfo(user,player);
+                } else {
+                    player.sendMessage(Text.of(TextColors.RED, "User not found"));
+                }
             }
 
-        } else {
+        }else {
             printUserInfo(((User)player),player);
         }
 
@@ -67,7 +74,7 @@ public class leaderboard implements CommandExecutor {
         Objective obj = Sponge.getGame().getRegistry().createBuilder(Objective.Builder.class).criterion(Criteria.DUMMY).name("Rankings").displayName(Text.of(TextStyles.BOLD, TextColors.BLUE, "   PixelQueue Rankings   ")).build();
         obj.getOrCreateScore(Text.of(TextColors.DARK_GRAY, TextStyles.BOLD, "  ")).setScore(30);
         obj.getOrCreateScore(Text.of(TextColors.DARK_GRAY, TextStyles.BOLD, " ")).setScore(1);
-        obj.getOrCreateScore(Text.of(TextColors.YELLOW, TextStyles.BOLD, "Page " + (page / 10 - 1))).setScore(0);
+        obj.getOrCreateScore(Text.of(TextColors.YELLOW, TextStyles.BOLD, "Page " + ((page / 10 - 1) + 2))).setScore(0);
 
 
         int f = 29;
@@ -102,16 +109,16 @@ public class leaderboard implements CommandExecutor {
         player.setScoreboard(scoreboard);
     }
 
-    public void printUserInfo(User userDude,Player player) {
+    private void printUserInfo(User userDude, Player player) {
 
-            Player user = (Player) userDude;
+            User user = userDude;
             int rank = 0;
             int elo = Storage.getELOOU(user.getUniqueId());
             int wins = Storage.getWins(user.getUniqueId());
             List<PlayerRanking> playerRankingList = Storage.getPlayerRankings();
             playerRankingList.sort(Comparator.comparingInt(PlayerRanking::getOuelo).reversed());
             for (int i = 0; i < playerRankingList.size(); i++) {
-                if (playerRankingList.get(i).equals(user)) {
+                if (playerRankingList.get(i).getPlayer().getName().equals(user.getName())) {
                     rank = i + 1;
                 }
             }

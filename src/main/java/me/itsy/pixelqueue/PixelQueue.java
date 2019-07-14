@@ -109,7 +109,7 @@ public class PixelQueue {
         CommandSpec leaderboardCMD = CommandSpec.builder()
                 .description(Text.of("Displays leaderboard based on ELO"))
                 .executor(new leaderboard())
-                .arguments(GenericArguments.optional(GenericArguments.integer(Text.of("page"))),GenericArguments.optional(GenericArguments.string(Text.of("user"))))
+                .arguments(GenericArguments.optional(GenericArguments.string(Text.of("page"))),GenericArguments.optional(GenericArguments.string(Text.of("player"))))
                 .permission("pixelqueue.leaderboard")
                 .build();
 
