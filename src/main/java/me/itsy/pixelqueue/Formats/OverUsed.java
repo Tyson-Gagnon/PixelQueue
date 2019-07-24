@@ -14,9 +14,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class OverUsed {
 
@@ -43,17 +41,6 @@ public class OverUsed {
                 if (canPlay) {
                     PlayerWithELO playerWithELO = new PlayerWithELO(spongePlayer, Storage.getELOOU(spongePlayer.getUniqueId()), Storage.getELOAG(spongePlayer.getUniqueId()));
                     listOfPlayersInQueue.add(playerWithELO);
-//                listOfPlayersInQueue.sort(new Comparator<PlayerWithELO>() {
-//
-//                    @Override
-//                    public int compare(PlayerWithELO p1, PlayerWithELO p2) {
-//                        if(p1.getOu() == p2.getOu()){
-//                            return 0;
-//                        }
-//                        return Integer.compare(p1.getOu(),p2.getOu());
-//                    }
-//                });
-
 
                 } else {
                     spongePlayer.sendMessage(Text.of(TextColors.GOLD, "[PixelQueue] ", TextColors.RED, " You have been kicked from the queue. You have an illegal pokemon in your party!"));
@@ -62,6 +49,7 @@ public class OverUsed {
             }
 
             if (PixelQueue.playersInQueueOU.size() > 1) {
+                Collections.shuffle(listOfPlayersInQueue);
                 for (PlayerWithELO playerWithELO : listOfPlayersInQueue) {
                     Sponge.getServer().getBroadcastChannel().send(Text.of(playerWithELO.getPlayer().getName()));
                     if (PixelQueue.playersInQueueOU.contains(playerWithELO.getPlayer())) {
